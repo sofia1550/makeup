@@ -137,9 +137,22 @@ const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [initialMessageSent, setInitialMessageSent] = useState(false);
 
   const toggleChatbot = () => {
-    setIsExpanded(!isExpanded); // Cambiar el estado para expandir o contraer el chatbot
+    setIsExpanded(!isExpanded);
+  
+    // Verifica si el chatbot se está expandiendo y si el mensaje inicial aún no se ha enviado
+    if (!isExpanded && !initialMessageSent) {
+      const welcomeMessage: Message = {
+        author: "bot",
+        content: "Por favor, indícame qué productos estás buscando: ojos, uñas, rostro, maquillaje o labial.",
+      };
+  
+      // Añade el mensaje de bienvenida a la lista de mensajes y actualiza el estado para indicar que el mensaje inicial ya se envió
+      setMessages((prevMessages) => [...prevMessages, welcomeMessage]);
+      setInitialMessageSent(true); // Asegúrate de que el mensaje de bienvenida solo se añada una vez
+    }
   };
 
   const sendMessage = async () => {
