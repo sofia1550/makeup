@@ -85,9 +85,13 @@ const Button = styled.button`
 interface Message {
   author: string;
   content: string;
-  imageUrl?: string; // Opcional para mensajes que incluyen imágenes
+  imageUrl?: string; 
 }
-
+interface Product {
+  nombre: string;
+  descripcion: string;
+  imagen_url: string; 
+}
 const Chatbot: React.FC = () => {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -100,22 +104,30 @@ const Chatbot: React.FC = () => {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
 
     try {
-      const response = await axios.post("https://asdasdasd3.onrender.com/api/products/search", { query: input });
+      const response = await axios.post(
+        "https://asdasdasd3.onrender.com/api/products/search",
+        { query: input }
+      );
       const responseData = response.data;
 
       // Asumiendo que responseData.data es un array de productos
-      const botMessages = responseData.data.map((product: any) => {
+      const botMessages = responseData.data.map((product: Product) => {
         return {
           author: "bot",
           content: `Producto encontrado: ${product.nombre} - ${product.descripcion}`,
-          imageUrl: product.imagen_url.startsWith('http') ? product.imagen_url : `https://asdasdasd3.onrender.com${product.imagen_url}`,
+          imageUrl: product.imagen_url.startsWith("http")
+            ? product.imagen_url
+            : `https://asdasdasd3.onrender.com${product.imagen_url}`,
         };
       });
 
       // Añadir los mensajes del bot a la lista de mensajes
       setMessages((prevMessages) => [...prevMessages, ...botMessages]);
     } catch (error) {
-      const errorMessage: Message = { author: "bot", content: "Hubo un error buscando los productos. Intenta de nuevo." };
+      const errorMessage: Message = {
+        author: "bot",
+        content: "Hubo un error buscando los productos. Intenta de nuevo.",
+      };
       setMessages((prevMessages) => [...prevMessages, errorMessage]);
       console.error(error);
     }
@@ -131,7 +143,15 @@ const Chatbot: React.FC = () => {
             {message.content}
             {message.imageUrl && (
               <div style={{ marginTop: "10px" }}>
-                <Image src={message.imageUrl} alt="Product" style={{ maxWidth: "100px", maxHeight: "100px", borderRadius: "10px" }} />
+                <Image
+                  src={message.imageUrl}
+                  alt="Product"
+                  style={{
+                    maxWidth: "100px",
+                    maxHeight: "100px",
+                    borderRadius: "10px",
+                  }}
+                />
               </div>
             )}
           </MessageItem>
