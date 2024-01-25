@@ -32,16 +32,21 @@ const Container = styled.div<ContainerProps>`
   position: fixed;
   bottom: 20px;
   right: 20px;
-  width: 350px;
-  border: 1px solid #d3b8ae; // Color beige suave para el borde
+  width: 350px; // Ancho predeterminado para pantallas grandes
+  border: 1px solid #d3b8ae;
   border-radius: 15px;
-  background-color: #faf3f0; // Color de fondo claro
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); // Sombra más suave
+  background-color: #faf3f0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   padding: 15px;
   box-sizing: border-box;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  display: ${({ isExpanded }) =>
-    isExpanded ? "block" : "none"}; // Controlar la visibilidad
+  display: ${({ isExpanded }) => (isExpanded ? "block" : "none")};
+
+  @media (max-width: 400px) {
+    width: calc(100% - 40px); // Ajusta el ancho para pantallas pequeñas
+    bottom: 10px;
+    right: 10px;
+  }
 `;
 
 const Header = styled.div`
@@ -59,9 +64,13 @@ const MessageList = styled.ul`
   margin: 0;
   padding: 0;
   overflow-y: auto;
-  max-height: 300px;
+  max-height: 300px; // Altura predeterminada para pantallas grandes
   margin-bottom: 15px;
   color: black;
+
+  @media (max-width: 400px) {
+    max-height: 200px; // Ajusta la altura máxima para pantallas pequeñas
+  }
 `;
 
 const Message = styled.li<{ author: string }>`
@@ -79,31 +88,24 @@ const Message = styled.li<{ author: string }>`
 `;
 
 const Input = styled.input`
-  width: calc(100% - 120px);
+  width: calc(100% - 120px); // Ancho predeterminado para pantallas grandes
   padding: 10px 15px;
   border-radius: 25px;
-  border: 2px solid #ff69b4; // Color rosa para el borde
+  border: 2px solid #ff69b4;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: border 0.3s ease;
   color: black;
 
   &:focus {
-    border-color: #ff1493; // Un rosa más oscuro para el foco
+    border-color: #ff1493;
     outline: none;
   }
-`;
-const MessageItem = styled.li<{ author: string }>`
-  text-align: ${({ author }) => (author === "user" ? "right" : "left")};
-  margin-bottom: 12px;
-  line-height: 1.4;
 
-  &:before {
-    content: ${({ author }) => (author === "user" ? `'You:'` : `'Bot:'`)};
-    font-weight: bold;
-    margin-right: 8px;
-    color: ${({ author }) => (author === "user" ? "#007bff" : "#ff4500")};
+  @media (max-width: 400px) {
+    width: calc(100% - 80px); // Ajusta el ancho para pantallas pequeñas
   }
 `;
+
 const Button = styled.button`
   padding: 10px 15px;
   margin-left: 10px;
@@ -117,6 +119,22 @@ const Button = styled.button`
 
   &:hover {
     background-color: #ff1493;
+  }
+
+  @media (max-width: 400px) {
+    padding: 8px 12px; // Ajusta el relleno para pantallas pequeñas
+  }
+`;
+const MessageItem = styled.li<{ author: string }>`
+  text-align: ${({ author }) => (author === "user" ? "right" : "left")};
+  margin-bottom: 12px;
+  line-height: 1.4;
+
+  &:before {
+    content: ${({ author }) => (author === "user" ? `'You:'` : `'Bot:'`)};
+    font-weight: bold;
+    margin-right: 8px;
+    color: ${({ author }) => (author === "user" ? "#007bff" : "#ff4500")};
   }
 `;
 interface Message {
